@@ -31,10 +31,10 @@ include $(DEVKITARM)/3ds_rules
 #     - icon.png
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
-APP_TITLE       := 	Nimbus
-APP_DESCRIPTION := 	Nimbus
-APP_AUTHOR	:=	Zaksabeast, shutterbug2000
-TARGET		:=	nimbus
+APP_TITLE       := 	Cirrus
+APP_DESCRIPTION := 	Cirrus
+APP_AUTHOR	:=	Samtendo Network
+TARGET		:=	cirrus
 BUILD		:=	build
 SOURCES		:=	source source/states source/sysmodules
 DATA		:=	data
@@ -43,7 +43,7 @@ ROMFS		:=	romfs
 GRAPHICS	:=	$(ROMFS)/gfx
 GFXBUILD 	:=  $(BUILD)
 
-RSF_FILE := meta/nimbus-cia.rsf
+RSF_FILE := meta/cirrus-cia.rsf
 
 ICON      := meta/icon.png
 BNR_IMAGE := meta/banner.png

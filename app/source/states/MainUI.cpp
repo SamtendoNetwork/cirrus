@@ -9,9 +9,9 @@
 #include "../plgldr.h"
 
 constexpr Result ResultFPDLocalAccountNotExists = 0xC880C4ED; // FPD::LocalAccountNotExists
-const char *NIMBUS_PLUGIN = "/luma/plugins/nimbus.3gx";
-const char *NIMBUS_PLUGIN_MAGIC = "NMBS";
-constexpr u32 NIMBUS_PLUGIN_VERSION = SYSTEM_VERSION(1, 0, 0);
+const char *CIRRUS_PLUGIN = "/luma/plugins/cirrus.3gx";
+const char *CIRRUS_PLUGIN_MAGIC = "CRRS";
+constexpr u32 CIRRUS_PLUGIN_VERSION = SYSTEM_VERSION(1, 0, 0);
 
 Result retPNID = 0;
 u32 pnidAccountSlot = 0;
@@ -188,9 +188,9 @@ void MainUI::migrateAccount(MainStruct *mainStruct) {
 
 void MainUI::unlinkPNID(MainStruct *mainStruct) {
     if (R_FAILED(retPNID = ACTA_UnbindServerAccount(pnidAccountSlot, true))) {
-        LOG_NIMBUS_ERROR(mainStruct, std::format("ACTA_UnbindServerAccount failed with error code {}!", retPNID).c_str());
+        LOG_CIRRUS_ERROR(mainStruct, std::format("ACTA_UnbindServerAccount failed with error code {}!", retPNID).c_str());
 	} else {
-		LOG_NIMBUS_ERROR(mainStruct, "Successfully unlinked PNID!");
+		LOG_CIRRUS_ERROR(mainStruct, "Successfully unlinked PNID!");
 	}
 }
 
@@ -210,12 +210,12 @@ void MainUI::launchPlugin(MainStruct *mainStruct) {
     plgparam.pluginMemoryStrategy = PLG_STRATEGY_SWAP;
     plgparam.persistent = 1;
     plgparam.lowTitleId = 0;
-    strcpy(plgparam.path, NIMBUS_PLUGIN);
+    strcpy(plgparam.path, CIRRUS_PLUGIN);
 
     // Use custom header on config as a way to differentiate between plugin load from launcher
     // and load by the user (by saving the plugin file as default or on a specific game)
-    strcpy(reinterpret_cast<char*>(plgparam.config), NIMBUS_PLUGIN_MAGIC);
-    plgparam.config[1] = NIMBUS_PLUGIN_VERSION;
+    strcpy(reinterpret_cast<char*>(plgparam.config), CIRRUS_PLUGIN_MAGIC);
+    plgparam.config[1] = CIRRUS_PLUGIN_VERSION;
 
     handleResult(plgLdrInit(), mainStruct, "Initialize plg:ldr");
     if (R_FAILED(rc)) {
@@ -230,7 +230,7 @@ void MainUI::launchPlugin(MainStruct *mainStruct) {
     }
 
     if (version < SYSTEM_VERSION(1, 0, 2)) {
-        LOG_NIMBUS_ERROR(mainStruct, "Unsupported plg:ldr version, please update Luma3DS");
+        LOG_CIRRUS_ERROR(mainStruct, "Unsupported plg:ldr version, please update Luma3DS");
         plgLdrExit();
         return;
     }
@@ -253,7 +253,7 @@ void MainUI::launchPlugin(MainStruct *mainStruct) {
     plgLdrExit();
 
     // Logs won't override any previous errors
-    LOG_NIMBUS_ERROR(mainStruct, "Nimbus plugin ready! Launch a game from the Home Menu");
+    LOG_CIRRUS_ERROR(mainStruct, "Cirrus plugin ready! Launch a game from the Home Menu");
     return;
 }
 
@@ -328,10 +328,10 @@ void MainUI::drawPrompt(MainStruct* mainStruct)
 
 bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_RenderTarget* bottom_screen, u32 kDown, u32 kHeld, touchPosition touch)
 {
-    // Check if Nimbus has been updated
+    // Check if Cirrus has been updated
     if (!mainStruct->updateChecked) {
         mainStruct->updateChecked = true;
-        if (auto* updateCheck = std::fopen(NIMBUS_UPDATE_PATH "/update.txt", "rb")) {
+        if (auto* updateCheck = std::fopen(CIRRUS_UPDATE_PATH "/update.txt", "rb")) {
             std::fclose(updateCheck);
 
             migrateAccount(mainStruct);
@@ -341,41 +341,41 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
                 mkdir("/luma", 0777);
                 mkdir("/luma/sysmodules", 0777);
                 std::remove("/luma/sysmodules/0004013000003202.ips");
-                std::rename(NIMBUS_UPDATE_PATH "/0004013000003202.ips", "/luma/sysmodules/0004013000003202.ips");
+                std::rename(CIRRUS_UPDATE_PATH "/0004013000003202.ips", "/luma/sysmodules/0004013000003202.ips");
                 std::remove("/luma/sysmodules/0004013000003802.ips");
-                std::rename(NIMBUS_UPDATE_PATH "/0004013000003802.ips", "/luma/sysmodules/0004013000003802.ips");
+                std::rename(CIRRUS_UPDATE_PATH "/0004013000003802.ips", "/luma/sysmodules/0004013000003802.ips");
                 std::remove("/luma/sysmodules/0004013000002902.ips");
-                std::rename(NIMBUS_UPDATE_PATH "/0004013000002902.ips", "/luma/sysmodules/0004013000002902.ips");
+                std::rename(CIRRUS_UPDATE_PATH "/0004013000002902.ips", "/luma/sysmodules/0004013000002902.ips");
                 std::remove("/luma/sysmodules/0004013000002E02.ips");
-                std::rename(NIMBUS_UPDATE_PATH "/0004013000002E02.ips", "/luma/sysmodules/0004013000002E02.ips");
+                std::rename(CIRRUS_UPDATE_PATH "/0004013000002E02.ips", "/luma/sysmodules/0004013000002E02.ips");
                 std::remove("/luma/sysmodules/0004013000002F02.ips");
-                std::rename(NIMBUS_UPDATE_PATH "/0004013000002F02.ips", "/luma/sysmodules/0004013000002F02.ips");
+                std::rename(CIRRUS_UPDATE_PATH "/0004013000002F02.ips", "/luma/sysmodules/0004013000002F02.ips");
 
                 mkdir("/luma/titles", 0777);
                 mkdir("/luma/titles/000400300000BC02", 0777);
                 std::remove("/luma/titles/000400300000BC02/code.ips");
-                std::rename(NIMBUS_UPDATE_PATH "/000400300000BC02.ips", "/luma/titles/000400300000BC02/code.ips");
+                std::rename(CIRRUS_UPDATE_PATH "/000400300000BC02.ips", "/luma/titles/000400300000BC02/code.ips");
 
                 mkdir("/luma/titles/000400300000BD02", 0777);
                 std::remove("/luma/titles/000400300000BD02/code.ips");
-                std::rename(NIMBUS_UPDATE_PATH "/000400300000BD02.ips", "/luma/titles/000400300000BD02/code.ips");
+                std::rename(CIRRUS_UPDATE_PATH "/000400300000BD02.ips", "/luma/titles/000400300000BD02/code.ips");
 
                 mkdir("/luma/titles/000400300000BE02", 0777);
                 std::remove("/luma/titles/000400300000BE02/code.ips");
-                std::rename(NIMBUS_UPDATE_PATH "/000400300000BE02.ips", "/luma/titles/000400300000BE02/code.ips");
+                std::rename(CIRRUS_UPDATE_PATH "/000400300000BE02.ips", "/luma/titles/000400300000BE02/code.ips");
 
                 mkdir("/luma/plugins", 0777);
-                std::remove("/luma/plugins/nimbus.3gx");
-                std::rename(NIMBUS_UPDATE_PATH "/nimbus.3gx",           "/luma/plugins/nimbus.3gx");
+                std::remove("/luma/plugins/cirrus.3gx");
+                std::rename(CIRRUS_UPDATE_PATH "/cirrus.3gx",           "/luma/plugins/cirrus.3gx");
 
                 std::remove("/3ds/juxt-prod.pem");
-                std::rename(NIMBUS_UPDATE_PATH "/juxt-prod.pem",        "/3ds/juxt-prod.pem");
+                std::rename(CIRRUS_UPDATE_PATH "/juxt-prod.pem",        "/3ds/juxt-prod.pem");
 
-                std::remove(NIMBUS_UPDATE_PATH "/update.txt");
+                std::remove(CIRRUS_UPDATE_PATH "/update.txt");
             }
 
             // Logs won't override any previous errors
-            LOG_NIMBUS_ERROR(mainStruct, "Nimbus has been updated!");
+            LOG_CIRRUS_ERROR(mainStruct, "Cirrus has been updated!");
 
             aptSetHomeAllowed(false);
             mainStruct->needsReboot = true;
@@ -396,7 +396,7 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
                     unlinkPNID(mainStruct);
                     break;
                 default:
-                    LOG_NIMBUS_ERROR(mainStruct, "Unknown prompt called.");
+                    LOG_CIRRUS_ERROR(mainStruct, "Unknown prompt called.");
                     break;
             }
             mainStruct->prompt.result = PromptResult::None;
@@ -474,17 +474,17 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
             // We need to confirm we actually even have a linked PNID.
 	        if (R_SUCCEEDED(retPNID)) {
 		        if (R_FAILED(retPNID = ACT_GetAccountIndexOfFriendAccountId(&pnidAccountSlot, 2))) {
-			        LOG_NIMBUS_ERROR(mainStruct, std::format("ACT_GetAccountIndexOfFriendAccountId failed with error code {}!", retPNID).c_str());
+			        LOG_CIRRUS_ERROR(mainStruct, std::format("ACT_GetAccountIndexOfFriendAccountId failed with error code {}!", retPNID).c_str());
 		        }
 	        }
 
             if (pnidAccountSlot == 0) {
-                LOG_NIMBUS_ERROR(mainStruct, "There is no PNID linked on this console!");
+                LOG_CIRRUS_ERROR(mainStruct, "There is no PNID linked on this console!");
             }
 
 	        if (R_SUCCEEDED(retPNID)) {
 		        if (R_FAILED(retPNID = ACT_GetAccountInfo(pnid, sizeof(pnid), pnidAccountSlot, INFO_TYPE_ACCOUNT_ID))) {
-			        LOG_NIMBUS_ERROR(mainStruct, std::format("ACT_GetAccountInfo failed with error code {}!", retPNID).c_str());
+			        LOG_CIRRUS_ERROR(mainStruct, std::format("ACT_GetAccountInfo failed with error code {}!", retPNID).c_str());
 		        }
 	        }
 
@@ -492,7 +492,7 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
 		        if (pnid[0] != '\0') {
 			        openPrompt(mainStruct, std::format("Are you sure you would like to unlink your PNID {}? Your PNID can be relinked at any time.", pnid), PromptStatus::PNIDUnlink);
 		        } else {
-			        LOG_NIMBUS_ERROR(mainStruct, "There is no PNID linked on this console!");
+			        LOG_CIRRUS_ERROR(mainStruct, "There is no PNID linked on this console!");
 		        }
 	        }
         }
@@ -525,7 +525,7 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
 
         if (R_SUCCEEDED(rc)) {
             rc = handleAzahar(accountId);
-            LOG_NIMBUS_ERROR(mainStruct, std::format("Failed to apply Azahar configuration: {}", rc).c_str());
+            LOG_CIRRUS_ERROR(mainStruct, std::format("Failed to apply Azahar configuration: {}", rc).c_str());
         }
 
         if (R_FAILED(rc)) {

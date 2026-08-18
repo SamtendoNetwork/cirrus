@@ -10,12 +10,12 @@
 #include <algorithm>
 #include <string>
 
-#define NIMBUS_UPDATE_PATH "/3ds/nimbus/update"
+#define CIRRUS_UPDATE_PATH "/3ds/cirrus/update"
 
 enum class NascEnvironment : u8 {
 	NASC_ENV_Prod = 0, // nintendo
 	NASC_ENV_Test = 1, // pretendo
-	NASC_ENV_Dev = 2
+	NASC_ENV_Dev = 2 // samtendo
 };
 
 enum class CFWSystemInfoField : s32 {
@@ -97,12 +97,12 @@ struct MainStruct {
 	PromptState prompt;
 };
 
-#define LOG_NIMBUS_ERROR(mainStruct, fmt) \
+#define LOG_CIRRUS_ERROR(mainStruct, fmt) \
 	if (mainStruct->errorString[0] == 0) {                                       \
 		snprintf(mainStruct->errorString, sizeof(mainStruct->errorString), fmt); \
 	}
 
-#define LOGF_NIMBUS_ERROR(mainStruct, fmt, ...) \
+#define LOGF_CIRRUS_ERROR(mainStruct, fmt, ...) \
 	if (mainStruct->errorString[0] == 0) {                                                    \
 		snprintf(mainStruct->errorString, sizeof(mainStruct->errorString), fmt, __VA_ARGS__); \
 	}
@@ -110,7 +110,7 @@ struct MainStruct {
 #define handleResult(action, mainStruct, name) \
 	rc = action;                                                                \
 	if (R_FAILED(rc)) {                                                         \
-		LOGF_NIMBUS_ERROR(mainStruct, "%s failed with error: %08lx", name, rc); \
+		LOGF_CIRRUS_ERROR(mainStruct, "%s failed with error: %08lx", name, rc); \
 		printf("%s failed with error: %08lx\n\n", name, rc);                    \
 	}
 

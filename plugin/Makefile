@@ -10,7 +10,7 @@ include $(DEVKITARM)/3ds_rules
 CTRPFLIB	?=	$(DEVKITPRO)/libctrpf
 
 TARGET		:= 	$(notdir $(CURDIR))
-PLGINFO 	:= 	nimbus.plgInfo
+PLGINFO 	:= 	cirrus.plgInfo
 
 BUILD		:= 	Build
 INCLUDES	:= 	Includes

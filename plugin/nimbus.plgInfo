@@ -8,7 +8,7 @@ Version: # Plugin version
 Targets: # Low TitleId of games which are compatibles with this plugin (empty for all)
 
 
-Title: nimbus
+Title: cirrus
 
 Summary:  Adds additional networking features and security fixes.
 
