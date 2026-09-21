@@ -1,3 +1,4 @@
+// Modified 2026 by Samtendo Network, originally by Pretendo Network
 #include <array>
 #include <format>
 #include <string>
@@ -56,6 +57,8 @@ Result MainUI::switchAccounts(MainStruct *mainStruct, u8 friend_account_id) {
     if (R_FAILED(rc)) {
         return rc;
     }
+
+
 
     u32 act_account_index = 0;
     handleResult(ACT_GetAccountIndexOfFriendAccountId(&act_account_index, friend_account_id), mainStruct, "Get ACT account ID of friend account ID");
@@ -123,7 +126,7 @@ Result MainUI::handleAzahar(u8 friend_account_id) {
         {"nintendo\\.net"},
         {"pokemon-gl\\.com"}
     }};
-    const std::string replacement = "pretendo.cc";
+    const std::string replacement = "samtendo.net";
 
     Result res = httpcInit(0x1000);
     if (friend_account_id == 2) {
@@ -432,8 +435,8 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
             C2D_DrawSprite(&mainStruct->pretendo_loaded_deselected);
         }
     }
-    else if (mainStruct->buttonSelected == NascEnvironment::NASC_ENV_Test) {
-        if (mainStruct->currentAccount == NascEnvironment::NASC_ENV_Test) {
+    else if (mainStruct->buttonSelected == NascEnvironment::NASC_ENV_Dev) {
+        if (mainStruct->currentAccount == NascEnvironment::NASC_ENV_Dev) {
             C2D_DrawSprite(&mainStruct->nintendo_unloaded_deselected);
             C2D_DrawSprite(&mainStruct->pretendo_loaded_selected);
         }
@@ -441,6 +444,11 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
             C2D_DrawSprite(&mainStruct->nintendo_loaded_deselected);
             C2D_DrawSprite(&mainStruct->pretendo_unloaded_selected);
         }
+    }
+    // for some reason pretendo did not check
+    else {
+        C2D_DrawSprite(&mainStruct->nintendo_unloaded_deselected);
+        C2D_DrawSprite(&mainStruct->pretendo_unloaded_selected);
     }
     C2D_DrawSprite(&mainStruct->header);
     drawPrompt(mainStruct);
@@ -454,12 +462,12 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
                 mainStruct->buttonWasPressed = true;
             }
             else if ((touch.px >= 49 && touch.px <= 49 + 104) && (touch.py >= 59 && touch.py <= 59 + 113)) {
-                mainStruct->buttonSelected = NascEnvironment::NASC_ENV_Test;
+                mainStruct->buttonSelected = NascEnvironment::NASC_ENV_Dev;
                 mainStruct->buttonWasPressed = true;
             }
         }
         else if (kDown & KEY_LEFT || kDown & KEY_RIGHT) {
-            mainStruct->buttonSelected = mainStruct->buttonSelected == NascEnvironment::NASC_ENV_Test ? NascEnvironment::NASC_ENV_Prod : NascEnvironment::NASC_ENV_Test;
+            mainStruct->buttonSelected = mainStruct->buttonSelected == NascEnvironment::NASC_ENV_Dev ? NascEnvironment::NASC_ENV_Prod : NascEnvironment::NASC_ENV_Dev;
         }
 
         if (mainStruct->prompt.active) {
@@ -473,7 +481,7 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
         if (kDown & KEY_X) {
             // We need to confirm we actually even have a linked PNID.
 	        if (R_SUCCEEDED(retPNID)) {
-		        if (R_FAILED(retPNID = ACT_GetAccountIndexOfFriendAccountId(&pnidAccountSlot, 2))) {
+		        if (R_FAILED(retPNID = ACT_GetAccountIndexOfFriendAccountId(&pnidAccountSlot, 3))) {
 			        LOG_CIRRUS_ERROR(mainStruct, std::format("ACT_GetAccountIndexOfFriendAccountId failed with error code {}!", retPNID).c_str());
 		        }
 	        }
@@ -511,15 +519,25 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
         // If the chosen account is the one we are already logged into, exit without rebooting
         if (mainStruct->currentAccount == mainStruct->buttonSelected) return true;
 
-        u8 accountId = (u8)mainStruct->buttonSelected + 1; // by default set accountId to nasc environment + 1
+        // wtf pretendo
+        //u8 accountId = (u8)mainStruct->buttonSelected + 1; // by default set accountId to nasc environment + 1
+
+        u8 accountId;
+
+        if (mainStruct->buttonSelected == NascEnvironment::NASC_ENV_Dev) {
+            accountId = 3;
+        } else {
+            accountId = 1;
+        }
+
 
         Result rc = unloadAccount(mainStruct);
         if (R_SUCCEEDED(rc)) {
             rc = switchAccounts(mainStruct, accountId);
-            if (rc == ResultFPDLocalAccountNotExists && accountId == 2) {
+            if (rc == ResultFPDLocalAccountNotExists && accountId == 3) {
                 // Clear the error to allow createAccount to override it
                 memset(mainStruct->errorString, 0, 256);
-                rc = createAccount(mainStruct, accountId, NascEnvironment::NASC_ENV_Test);
+                rc = createAccount(mainStruct, accountId, NascEnvironment::NASC_ENV_Dev);
             }
         }
 
