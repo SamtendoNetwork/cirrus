@@ -448,7 +448,7 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
     // for some reason pretendo did not check
     else {
         C2D_DrawSprite(&mainStruct->nintendo_unloaded_deselected);
-        C2D_DrawSprite(&mainStruct->pretendo_unloaded_selected);
+        C2D_DrawSprite(&mainStruct->pretendo_unloaded_deselected);
     }
     C2D_DrawSprite(&mainStruct->header);
     drawPrompt(mainStruct);
