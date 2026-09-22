@@ -129,7 +129,7 @@ Result MainUI::handleAzahar(u8 friend_account_id) {
     const std::string replacement = "samtendo.net";
 
     Result res = httpcInit(0x1000);
-    if (friend_account_id == 2) {
+    if (friend_account_id == 3) {
         // Register Pretendo replacement URLs
         if (R_SUCCEEDED(res)) {
             for (const auto& pattern : patterns) {
@@ -179,7 +179,7 @@ void MainUI::migrateAccount(MainStruct *mainStruct) {
     Result rc = 0;
     u32 pretendo_account_index = 0;
     // Logs won't override any previous errors
-    handleResult(ACT_GetAccountIndexOfFriendAccountId(&pretendo_account_index, 2), mainStruct, "Get PNID for migration");
+    handleResult(ACT_GetAccountIndexOfFriendAccountId(&pretendo_account_index, 3), mainStruct, "Get PNID for migration");
     if (pretendo_account_index != 0) {
         bool is_commited = false;
         handleResult(ACT_GetAccountInfo(&is_commited, sizeof(bool), pretendo_account_index, INFO_TYPE_IS_COMMITTED), mainStruct, "Get PNID commit status");
