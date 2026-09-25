@@ -23,6 +23,10 @@
 
 Thanks to:
 
+- [kip](https://github.com/limesdotpink) for the CIA version banner
+- [TraceEntertains](https://github.com/TraceEntertains) for making a CIA version of Nimbus and maintaining the project
+- [DaniElectra](https://github.com/DaniElectra) for making the 3DS HTTP and Socket patches and maintaining the project
+- [Jon Barrow](https://github.com/jonbarrow) for the original Nimbus project
 - [Sam](https://github.com/sam51210) for maintaining the project
 - [Aep](https://github.com/Aeplet) for doing most of the work on Cirrus and maintaining the project
 - [SciresM](https://github.com/SciresM) for making the 3DS SSL patches
