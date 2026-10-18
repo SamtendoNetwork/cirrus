@@ -498,7 +498,8 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
 
             if (R_SUCCEEDED(retPNID)) {
 		        if (pnid[0] != '\0') {
-			        openPrompt(mainStruct, std::format("Are you sure you would like to unlink your PNID {}? Your PNID can be relinked at any time.", pnid), PromptStatus::PNIDUnlink);
+                    // Silly aep forgetting strings on your OWN FUNCTION
+			        openPrompt(mainStruct, std::format("Are you sure you would like to unlink your SNID {}? Your SNID can be relinked at any time.", pnid), PromptStatus::PNIDUnlink);
 		        } else {
 			        LOG_CIRRUS_ERROR(mainStruct, "There is no PNID linked on this console!");
 		        }
