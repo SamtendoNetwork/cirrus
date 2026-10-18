@@ -193,7 +193,7 @@ void MainUI::unlinkPNID(MainStruct *mainStruct) {
     if (R_FAILED(retPNID = ACTA_UnbindServerAccount(pnidAccountSlot, true))) {
         LOG_CIRRUS_ERROR(mainStruct, std::format("ACTA_UnbindServerAccount failed with error code {}!", retPNID).c_str());
 	} else {
-		LOG_CIRRUS_ERROR(mainStruct, "Successfully unlinked PNID!");
+		LOG_CIRRUS_ERROR(mainStruct, "Successfully unlinked SNID!");
 	}
 }
 
