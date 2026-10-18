@@ -479,7 +479,7 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
         }
 
         if (kDown & KEY_X) {
-            // We need to confirm we actually even have a linked PNID.
+            // We need to confirm we actually even have a linked SNID.
 	        if (R_SUCCEEDED(retPNID)) {
 		        if (R_FAILED(retPNID = ACT_GetAccountIndexOfFriendAccountId(&pnidAccountSlot, 3))) {
 			        LOG_CIRRUS_ERROR(mainStruct, std::format("ACT_GetAccountIndexOfFriendAccountId failed with error code {}!", retPNID).c_str());
@@ -487,7 +487,7 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
 	        }
 
             if (pnidAccountSlot == 0) {
-                LOG_CIRRUS_ERROR(mainStruct, "There is no PNID linked on this console!");
+                LOG_CIRRUS_ERROR(mainStruct, "There is no SNID linked on this console!");
             }
 
 	        if (R_SUCCEEDED(retPNID)) {
@@ -501,7 +501,7 @@ bool MainUI::drawUI(MainStruct *mainStruct, C3D_RenderTarget* top_screen, C3D_Re
                     // Silly aep forgetting strings on your OWN FUNCTION
 			        openPrompt(mainStruct, std::format("Are you sure you would like to unlink your SNID {}? Your SNID can be relinked at any time.", pnid), PromptStatus::PNIDUnlink);
 		        } else {
-			        LOG_CIRRUS_ERROR(mainStruct, "There is no PNID linked on this console!");
+			        LOG_CIRRUS_ERROR(mainStruct, "There is no SNID linked on this console!");
 		        }
 	        }
         }
