@@ -35,13 +35,13 @@ RUN git clone --depth 1 --branch "$BANNERTOOL_REF" \
     && cmake --install /tmp/bannertool/build \
     && rm -rf /tmp/bannertool
 
-RUN curl -fL --retry 3 \
-      https://github.com/3DSGuy/Project_CTR/releases/download/makerom-v0.19.0/makerom-v0.19.0-ubuntu_x86_64.zip \
-      -o /tmp/makerom.zip \
-    && echo '287b809dec064e0ad597e3d272c49ecb7eed41693d5ee6fef9d8a8aa24c2497e  /tmp/makerom.zip' | sha256sum -c - \
-    && unzip -q /tmp/makerom.zip -d /tmp/makerom \
-    && install -m 755 "$(find /tmp/makerom -type f -name makerom -print -quit)" /usr/local/bin/makerom \
-    && rm -rf /tmp/makerom /tmp/makerom.zip
+ARG MAKEROM_REF=makerom-v0.19.0
+RUN git clone --recursive --depth 1 --branch "$MAKEROM_REF" \
+      https://github.com/3DSGuy/Project_CTR.git /tmp/project-ctr \
+    && make -C /tmp/project-ctr/makerom deps \
+    && make -C /tmp/project-ctr/makerom -j2 \
+    && install -m 755 /tmp/project-ctr/makerom/bin/makerom /usr/local/bin/makerom \
+    && rm -rf /tmp/project-ctr
 
 ENV CTRPFLIB=/opt/devkitpro/libctrpf
 ENV PATH=/opt/devkitpro/tools/bin:/opt/devkitpro/devkitARM/bin:${PATH}
