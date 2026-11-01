@@ -31,5 +31,5 @@ Any region miiverse module is fine and should generate a patch that is identical
 3. Put it in sd:/gm9/scripts
 4. Run the script (Home Button -> Scripts -> dump_modules.gm9)
 5. Turn off your 3DS and remove the SD card.
-6. Copy the folder (named patches) from the nimbusmodules folder located on your SD card to your local clone of nimbus, and merge when prompted.
+6. Copy the folder (named patches) from the nimbusmodules folder located on your SD card to your local clone of Cirrus, and merge when prompted.
 7. Done!
